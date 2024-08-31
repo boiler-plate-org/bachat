@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middlewares/error";
 import transactionRouter from "./routes/transaction";
+import accountRouter from "./routes/account";
 
 dotenv.config();
 
@@ -17,8 +18,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/v1/user", userRouter)
-app.use("/api/v1/transaction", transactionRouter)
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/transaction", transactionRouter);
+app.use("/api/v1/account", accountRouter);
 
 app.use(ErrorMiddleware);
 

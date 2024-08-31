@@ -8,5 +8,7 @@ router.use(middlware);
 
 router.route("/add").post(controller.add);
 router.route("/:id").delete(controller.delete);
+router.route("/all").get(controller.fetchAll);
+router.route("/:id").get(controller.fetchById);
 
 export default router;

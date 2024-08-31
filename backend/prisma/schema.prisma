@@ -23,11 +23,12 @@ model User {
 }
 
 model Account {
-  id      String @id @default(uuid())
-  balance Int
-  limit   Int
-  userId  String @unique
-  user    User   @relation(fields: [userId], references: [id])
+  id       String   @id @default(uuid())
+  balance  Int
+  limit    Int
+  category String[]
+  userId   String   @unique
+  user     User     @relation(fields: [userId], references: [id])
 }
 
 model Transactions {

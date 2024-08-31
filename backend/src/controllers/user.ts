@@ -73,6 +73,60 @@ const controller = {
       });
     }
   ),
+
+  logout: CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.clearCookie("token");
+      req.user = undefined;
+
+      return res.status(200).json({
+        success: true,
+        message: "Logged out",
+      });
+    }
+  ),
+
+  delete: CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.user) {
+        res.clearCookie("token");
+        const message: string = "Unauthorized";
+        return next(new ErrorHandler(message, 400));
+      }
+
+      const userId = req.user.id;
+
+      const deleteTxn = await db.transactions.deleteMany({
+        where: { userId: userId },
+      });
+      const deleteAcc = await db.account.delete({ where: { userId: userId } });
+      const deleteUser = await db.user.delete({ where: { id: userId } });
+
+      return res.status(200).json({
+        success: true,
+        message: "Deleted user",
+      });
+    }
+  ),
+
+  fetchUser: CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+      if (!req.user) {
+        res.clearCookie("token");
+        const message: string = "Unauthorized";
+        return next(new ErrorHandler(message, 400));
+      }
+
+      const userId = req.user.id;
+
+      const response = await db.user.findUnique({ where: { id: userId } });
+
+      return res.status(200).json({
+        success: true,
+        message: response,
+      });
+    }
+  ),
 };
 
 export default controller;
